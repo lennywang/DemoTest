@@ -15,7 +15,7 @@ public class DBTest {
 			System.out.println("找不到MySQL驱动!");
 			e1.printStackTrace();
 		}
-
+		
 		String url = "jdbc:mysql://localhost:3306/test"; // JDBC的URL
 		// 调用DriverManager对象的getConnection()方法，获得一个Connection对象
 		Connection conn;
