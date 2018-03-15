@@ -4,65 +4,45 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
 public class DBTest {
 
 	public static void main(String[] args) {
-				 //声明Connection对象
-		         Connection con;
-		         //驱动程序名
-		         String driver = "com.mysql.jdbc.Driver";
-		         //URL指向要访问的数据库名mydata
-		         String url = "jdbc:mysql://localhost:3306/test";
-		         //MySQL配置时的用户名
-		         String user = "root";
-		         //MySQL配置时的密码
-		         String password = "";
-		         //遍历查询结果集
-		         try {
-		             //加载驱动程序
-		             Class.forName(driver);
-		             //1.getConnection()方法，连接MySQL数据库！！
-		             con = DriverManager.getConnection(url,user,password);
-		             if(!con.isClosed())
-		                 System.out.println("Succeeded connecting to the Database!");
-		             //2.创建statement类对象，用来执行SQL语句！！
-		             Statement statement = con.createStatement();
-		             //要执行的SQL语句
-		             String sql = "select * from student";
-		             //3.ResultSet类，用来存放获取的结果集！！
-		             ResultSet rs = statement.executeQuery(sql);
-		             System.out.println("-----------------");
-		             System.out.println("执行结果如下所示:");  
-		             System.out.println("-----------------");  
-		             System.out.println("姓名" + "\t" + "职称");  
-		             System.out.println("-----------------");  
-		              
-		             String name = null;
-		             String sex = null;
-		             while(rs.next()){
-		                 //获取stuname这列数据
-		                 name = rs.getString("name");
-		                 //获取stuid这列数据
-		                 sex = rs.getString("sex");		                 
-		                 //输出结果
-		                 System.out.println(name + "\t" + sex);
-		             }
-		             rs.close();
-		             con.close();
-		         } catch(ClassNotFoundException e) {   
-		             //数据库驱动类异常处理
-		             System.out.println("Sorry,can`t find the Driver!");   
-		             e.printStackTrace();   
-		             } catch(SQLException e) {
-		             //数据库连接失败异常处理
-		             e.printStackTrace();  
-		             }catch (Exception e) {
-		             e.printStackTrace();
-		         }finally{
-		             System.out.println("数据库数据成功获取！！");
-		         }
-		     }		
+		try {
+			// 调用Class.forName()方法加载驱动程序
+			Class.forName("com.mysql.jdbc.Driver");
+			System.out.println("成功加载MySQL驱动！");
+		} catch (ClassNotFoundException e1) {
+			System.out.println("找不到MySQL驱动!");
+			e1.printStackTrace();
+		}
+
+		String url = "jdbc:mysql://localhost:3306/test"; // JDBC的URL
+		// 调用DriverManager对象的getConnection()方法，获得一个Connection对象
+		Connection conn;
+		try {
+			conn = DriverManager.getConnection(url, "root", "wll0913");
+			// 创建一个Statement对象
+			Statement stmt = conn.createStatement(); // 创建Statement对象
+			System.out.println("成功连接到数据库！");
+
+			String sql = "select * from student"; // 要执行的SQL
+			ResultSet rs = stmt.executeQuery(sql);// 创建数据对象
+			System.out.println("编号" + "\t" + "姓名" + "\t" + "性别"+"\t"+"分数");
+			while (rs.next()) {
+				System.out.print(rs.getInt(1) + "\t");
+				System.out.print(rs.getString(2) + "\t");
+				System.out.print(rs.getString(3) + "\t");
+				System.out.print(rs.getString(4) + "\t");
+				System.out.println();
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
